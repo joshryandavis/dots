@@ -1,0 +1,5 @@
+system:
+  locale: ''
+  prime: true
+wine:
+  version: system
