@@ -1,7 +1,18 @@
-{{- if eq .chezmoi.os "linux" }}
-
+{{- if eq .chezmoi.os "darwin" }}
+gtk-2.0
+gtk-3.0
+gtk-4.0
+gtklock
+guvcview
+hypr
+lutris
+qt5ct
+qt6ct
+thunar
 {{- end}}
 
-{{- if eq .chezmoi.os "darwin" }}
-
+{{- if eq .chezmoi.os "linux" }}
+warp
+yabai
+skhd
 {{- end }}
