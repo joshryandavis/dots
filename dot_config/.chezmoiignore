@@ -9,6 +9,13 @@ lutris
 qt5ct
 qt6ct
 thunar
+xsdettingsd
+yay
+Xresources
+mimeapps.list
+dot_nvidia-settings-rc
+user-dirs.user-dirs
+xdg-terminals.list
 {{- end}}
 
 {{- if eq .chezmoi.os "linux" }}
