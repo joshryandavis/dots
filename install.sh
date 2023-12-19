@@ -25,6 +25,10 @@ script_dir="$(cd -P -- "$(dirname -- "$(command -v -- "$0")")" && pwd -P)"
 
 set -- init --apply --source="${script_dir}"
 
+echo "Logging into Bitwarden"
+
+bw login || true
+
 export BW_SESSION=$(bw unlock --raw)
 
 echo "Running 'chezmoi $*'" >&2
