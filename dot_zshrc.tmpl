@@ -45,12 +45,9 @@ plugins=(ssh-agent zsh-autosuggestions zsh-syntax-highlighting zsh-navigation-to
 source $ZSH/oh-my-zsh.sh
 
 export MANPATH="/usr/local/man:$MANPATH"
-
 export LANG=en_US.UTF-8
-
 export EDITOR='nvim'
 
-# Aliases
 alias vim="nvim"
 alias vi="nvim"
 alias pip="pip3"
@@ -60,28 +57,31 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$HOME/bin:/usr/local/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
-{{- if eq .chezmoi.os "darwin" }} 
+{{- if eq .chezmoi.os "darwin" }}
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"                                       # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completionource /usr/share/nvm/init-nvm.sh
 {{- end}}
 
-{{- if eq .chezmoi.os "linux" }} 
+{{- if eq .chezmoi.os "linux" }}
 export DOCKER_HOST=unix:///run/user/1000/docker.sock
 export NODE_PATH="/usr/lib/node_modules"
 {{- end }}
 
-BW_LOGGED_IN=$(bw status | grep "locked")
 
-bw login
+# Define the path to the temporary file
+temp_file="/tmp/bw_session"
 
-# load bw_session if exists and not empty, if not, authenticate and store the bw_session
-if [ -f ~/.bw_session ] && [ -s ~/.bw_session ]; then
-    export BW_SESSION="$(cat ~/.bw_session)"
-    echo "BW_SESSION already exists"
-else
-    export BW_SESSION="$(bw unlock --raw)"
-    echo $BW_SESSION > ~/.bw_session
-    echo "BW_SESSION created"
+# Check if BW_SESSION is already set
+if [ -z "$BW_SESSION" ]; then
+    # If not set, check if the temporary file exists
+    if [ -f "$temp_file" ]; then
+        # If the file exists, read the BW_SESSION from it
+        export BW_SESSION=$(cat "$temp_file")
+    else
+
+        bw login
+        export BW_SESSION=$(bw unlock --raw)
+        # Save BW_SESSION to the temporary file
+        echo "$BW_SESSION" > "$temp_file"
+    fi
 fi
-
-
