@@ -69,3 +69,19 @@ export PATH="$HOME/.local/bin:$PATH"
 export DOCKER_HOST=unix:///run/user/1000/docker.sock
 export NODE_PATH="/usr/lib/node_modules"
 {{- end }}
+
+BW_LOGGED_IN=$(bw status | grep "locked")
+
+bw login
+
+# load bw_session if exists and not empty, if not, authenticate and store the bw_session
+if [ -f ~/.bw_session ] && [ -s ~/.bw_session ]; then
+    export BW_SESSION="$(cat ~/.bw_session)"
+    echo "BW_SESSION already exists"
+else
+    export BW_SESSION="$(bw unlock --raw)"
+    echo $BW_SESSION > ~/.bw_session
+    echo "BW_SESSION created"
+fi
+
+
